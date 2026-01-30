@@ -54,6 +54,7 @@ int main() {
                 }
                 while (atual != NULL) {
                     listar_cliente(atual);
+                    atual = atual->proximo ;
                 }
                 break;
             }
@@ -130,6 +131,7 @@ void buscar_cliente(Cliente *inicio){
 }
 
 void editar_dados(Cliente *c){
+    
 
 }
 
