@@ -20,6 +20,10 @@ add_executable(test_app
     test/testProduto.c
 )
 
+add_executable(ras_app
+    teste/rasc.c
+)
+
 target_include_directories(test_app
     PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
