@@ -1,90 +1,168 @@
-#include <produto.h>
+#include "produto.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void gerar_codigo_produto(Produto* produto);
+const char *CODES_FILE = "codes/codes.csv"; // Ajuste o caminho se necessário
+const int START_NUM = 999;
 
-void imprimir_produto(Produto * produto){
-    printf("Nome: %s\n", produto->nome);
-    printf("Preco: R$%.2f\n", produto->preco);
-    printf("Codigo: %s\n\n", produto->codigo);
+int gerar_codigo_produto() {
+    FILE *f = fopen(CODES_FILE, "r");
+    int lastNum = START_NUM;
+    int currentNum;
+
+    if (f != NULL) {
+        while (fscanf(f, "%d,", &currentNum) == 1) {
+            lastNum = currentNum;
+        }
+        fclose(f);
+    }
+
+    int novoCodigo = lastNum + 1;
+    f = fopen(CODES_FILE, "a");
+    if (f == NULL) return -1;
+    
+    fprintf(f, "%d,", novoCodigo);
+    fclose(f);
+    return novoCodigo;
 }
 
-Produto* criar_lista_produto() {
+Produto* criar_no_produto(Produto x) {
     Produto* novo = malloc(sizeof(Produto));
-    if (novo != NULL) {
-        novo->prox = NULL;
-        strcpy(novo->nome, "0x0");
-        novo->preco = -1;
+    if (novo == NULL) return NULL;
+
+    novo->nome = malloc(strlen(x.nome) + 1);
+    if (novo->nome != NULL) {
+        strcpy(novo->nome, x.nome);
     }
+    novo->codigo = x.codigo;
+    novo->preco = x.preco;
+    novo->prox = NULL;
     return novo;
 }
 
+Produto* criar_lista_produto() {
+    Produto* cabeca = malloc(sizeof(Produto));
+    if (cabeca != NULL) {
+        cabeca->prox = NULL;
+        cabeca->codigo = -1;
+        cabeca->preco = -1;
+        
+        // "0x0'\0'"
+        cabeca->nome = malloc(4 * sizeof(char));
+        if (cabeca->nome != NULL) {
+            strcpy(cabeca->nome, "0x0");
+        }
+    }
+    return cabeca;
+}
+
 void destruir_lista_produto(Produto** lista_ref) {
+    if (lista_ref == NULL || *lista_ref == NULL) return;
+    
     Produto* atual = *lista_ref;
     while (atual != NULL) {
         Produto* proximo = atual->prox;
+        free(atual->nome);
         free(atual);
         atual = proximo;
     }
     *lista_ref = NULL;
 }
 
-void adicionar_elemento_produto(Produto* lista_ref, Produto x) {
-    Produto* novo = malloc(sizeof(Produto));
+void inserir_produto_fim(Produto* lista_ref, Produto x) {
+    Produto* novo = criar_no_produto(x);
     if (novo == NULL) return;
 
-    //TO-DO copiar corretamente o elemento
-    *novo = x; 
-    novo->prox = lista_ref->prox;
-    lista_ref->prox = novo;
+    Produto* atual = lista_ref;
+    while (atual->prox != NULL) {
+        atual = atual->prox;
+    }
+    atual->prox = novo;
 }
 
-//TO-DO Implementation
-void procura_produto_e_remove(Produto* lista_ref, char *busca);
+Produto* buscar_produto_por_codigo(Produto* lista_ref, int codigo) {
+    Produto *aux = lista_ref->prox;
+    while (aux != NULL) {
+        if (aux->codigo == codigo) return aux;
+        aux = aux->prox;
+    }
+    return NULL;
+}
 
-void remove_ultimo_produto(Produto* lista) {
-    if (lista == NULL || lista->prox == NULL) return;
+Produto* buscar_produto_por_nome(Produto* lista_ref, char* busca) {
+    Produto *aux = lista_ref->prox;
+    while (aux != NULL) {
+        if (strstr(aux->nome, busca) != NULL) return aux;
+        aux = aux->prox;
+    }
+    return NULL;
+}
 
-    Produto *anterior = lista;
-    Produto *atual = lista->prox;
+void editar_preco_produto(Produto* lista_ref, int codigo, double novo_preco) {
+    Produto* p = buscar_produto_por_codigo(lista_ref, codigo);
+    if (p != NULL) {
+        p->preco = novo_preco;
+        printf("Preco do produto %d atualizado para R$ %.2f.\n", codigo, novo_preco);
+    } else {
+        printf("Erro: Produto %d nao encontrado.\n", codigo);
+    }
+}
 
-    while (atual->prox != NULL){
+void remover_produto_especifico(Produto* lista_ref, int codigo) {
+    Produto* anterior = lista_ref;
+    Produto* atual = lista_ref->prox;
+
+    while (atual != NULL && atual->codigo != codigo) {
+        anterior = atual;
+        atual = atual->prox;
+    }
+
+    if (atual != NULL) {
+        anterior->prox = atual->prox;
+        free(atual->nome);
+        free(atual);
+        printf("Produto %d removido.\n", codigo);
+    }
+}
+
+void remover_primeiro_da_lista(Produto* lista_ref) {
+    if (lista_ref == NULL || lista_ref->prox == NULL) return;
+    
+    Produto *remover = lista_ref->prox;
+    lista_ref->prox = remover->prox;
+    
+    free(remover->nome);
+    free(remover);
+}
+
+void remover_ultimo_da_lista(Produto* lista_ref) {
+    if (lista_ref == NULL || lista_ref->prox == NULL) return;
+
+    Produto *anterior = lista_ref;
+    Produto *atual = lista_ref->prox;
+
+    while (atual->prox != NULL) {
         anterior = atual;
         atual = atual->prox;
     }
 
     anterior->prox = NULL;
+    free(atual->nome);
     free(atual);
 }
 
-void imprime_lista_produto(Produto* lista){
-    Produto* aux;
-    for(aux = lista->prox; aux != NULL; aux = aux->prox){
-        imprimir_produto(aux);
-    }
+void imprimir_produto(Produto * prod) {
+    if (prod == NULL) return;
+    printf("[%d] %-15s | R$ %7.2f\n", prod->codigo, prod->nome, prod->preco);
 }
 
-void procure_produto(Produto* lista, char* busca){
-    Produto*aux;
-    printf("Opcoes achadas:\n");
-    for(aux = lista->prox; aux != NULL; aux = aux->prox){
-        char* result = strstr(aux->nome, busca);
-
-        if (result) imprimir_produto(aux);
-    }
-}
-
-Produto * procurar_produto_codigo(Produto* lista, char *codigo){
-    Produto *aux = lista->prox;
+void imprime_lista_produto(Produto* lista_ref) {
+    printf("\n--- LISTA DE PRODUTOS ---\n");
+    Produto* aux = lista_ref->prox;
     while (aux != NULL) {
-        if (strcmp(aux->codigo, codigo) == 0) {
-            printf("achei %s\n", aux->nome);
-            return aux;
-        }
+        imprimir_produto(aux);
         aux = aux->prox;
     }
-    printf("nao achei\n");
-    return aux;
+    printf("-------------------------\n");
 }

@@ -1,39 +1,30 @@
-//    Cadastrar produto (código único, nome e preço);
-//    Listar todos os produtos;
-//    Buscar produto pelo código;
-//    Editar dados de um produto;
-//    Remover produto;
 #ifndef PRODUTO_H
 #define PRODUTO_H
 
-//TO-DO Lista de produtos do carrinho
-typedef struct list {
-	struct produto *head;
-	int size;
-}List;
-
-typedef struct produto{
-    char nome[100];
-    char codigo[100];
+typedef struct produto {
+    char *nome;
+    int codigo;
     double preco;
     struct produto *prox;
-}Produto;
+} Produto;
 
-void gerar_codigo_produto(Produto* produto);
-void imprimir_produto(Produto * produto);
-
+int gerar_codigo_produto();
+Produto* criar_no_produto(Produto x);
 Produto* criar_lista_produto();
 void destruir_lista_produto(Produto** lista_ref);
 
-void adicionar_elemento_produto(Produto* lista_ref, Produto x);
-//TO-DO Implementation
-void procura_produto_e_remove(Produto* lista_ref, char *busca);
-void remove_ultimo_produto(Produto* lista);
+void inserir_produto_fim(Produto* lista_ref, Produto x);
 
-void imprime_lista_produto(Produto* lista);
-void procure_produto(Produto* lista, char* busca);
-Produto * procurar_produto_codigo(Produto* lista, char *codigo);
+void imprimir_produto(Produto* prod);
+void imprime_lista_produto(Produto* lista_ref);
 
-//TO-DO implementar a editição
+Produto* buscar_produto_por_codigo(Produto* lista_ref, int codigo);
+Produto* buscar_produto_por_nome(Produto* lista_ref, char* busca);
+
+void editar_preco_produto(Produto* lista_ref, int codigo, double novo_preco);
+
+void remover_primeiro_da_lista(Produto* lista_ref);
+void remover_ultimo_da_lista(Produto* lista_ref);
+void remover_produto_especifico(Produto* lista_ref, int codigo);
 
 #endif /* PRODUTO_H */
