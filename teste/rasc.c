@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> // Necessário para malloc/free e controle do sistema
+#include <stdlib.h>
 #include <string.h>
 
 typedef struct Cliente {
@@ -7,83 +7,132 @@ typedef struct Cliente {
     char cpf[12];
     char email[100];
     char telefone[15];
-    char data_nascimento[11]; // Aumentado para 11 para caber o '\0' final
+    char data_nascimento[11];
+    struct Cliente *proximo; 
 } Cliente;
 
-// Protótipos das funções
 void print_menu();
-void cadastrar_cliente(Cliente *c); // Passamos o endereço de UM cliente
+void cadastrar_cliente(Cliente *c);
 void listar_cliente(Cliente *c);
+void buscar_cliente(Cliente *c);
+void editar_dados(Cliente *c);
+void remover_cliente(Cliente *c);
 
 int main() {
     int entrada;
-    int qtd_max;
-    int clientes_cadastrados = 0;
+   
+    Cliente *inicio = NULL; 
 
-    print_menu();
-    printf("\nDigite a opcao desejada: ");
-    scanf("%d", &entrada);
+    do {
+        print_menu();
+        printf("\nDigite a opcao desejada: ");
+        scanf("%d", &entrada);
 
-    
-    printf("Quantos clientes deseja cadastrar no total? ");
-    scanf("%d", &qtd_max);
-    Cliente lista[qtd_max];
-
-    if (entrada == 1) {
-       // Loop para cadastrar
-        for (int i = 0; i < qtd_max; i++) {
-            printf("\n--- Cadastro do Cliente %d ---\n", i + 1);
-            cadastrar_cliente(&lista[i]); // Passa o endereço da posição i
-            clientes_cadastrados++;
+        switch (entrada) {
+            case 1: {
+               
+                Cliente *novo = (Cliente *) malloc(sizeof(Cliente));
+                if (novo == NULL) {
+                    printf("Erro de memoria!\n");
+                    break;
+                }
+                
+                cadastrar_cliente(novo);
+                
+                
+                novo->proximo = inicio;
+                inicio = novo;
+                
+                printf("\nCliente cadastrado com sucesso!\n");
+                break;
+            }
+            case 2: {
+                printf("\n--- LISTAGEM DE CLIENTES ---\n");
+                Cliente *atual = inicio;
+                if (atual == NULL) {
+                    printf("Lista vazia!\n");
+                }
+                while (atual != NULL) {
+                    listar_cliente(atual);
+                }
+                break;
+            }
+            case 0:
+                printf("Saindo do sistema...\n");
+                break;
+            default:
+                printf("Opcao invalida, tente novamente!\n");
         }
+    } while (entrada != 0);
 
-    } 
-    else if (entrada == 2){
-        // Exemplo de como listar logo após cadastrar
-        printf("\n--- LISTAGEM DE CLIENTES ---\n");
-        for (int i = 0; i < clientes_cadastrados; i++) {
-            listar_cliente(&lista[i]);
-        }
-    }
-    else {
-        printf("Para testar, escolha a opcao 1 primeiro!\n");
+    Cliente *atual = inicio;
+    while (atual != NULL) {
+        Cliente *temp = atual;
+        atual = atual->proximo;
+        free(temp);
     }
 
     return 0;
 }
 
 void print_menu() {
-    printf("--------------- BEM VINDO AO SISTEMA DE COMPRAS ------------------\n");
-    printf("1 - Cadastrar clientes\n");
+    printf("\n--------------- SISTEMA DE COMPRAS (LISTA) ------------------\n");
+    printf("1 - Cadastrar novo cliente\n");
     printf("2 - Listar todos os clientes\n");
     printf("3 - Buscar cliente pelo CPF\n");
-    printf("4 - Editar dados\n");
+    printf("4 - Editar dados de um cliente\n");
     printf("5 - Remover cliente\n");
+    printf("0 - Sair\n");
 }
 
 void cadastrar_cliente(Cliente *c) {
-    // O espaço antes do %s serve para ignorar o "Enter" anterior no buffer
     printf("Nome: ");
-    scanf(" %[^\n]s", c->nome); // %[^\n] lê inclusive espaços (nomes compostos)
-
+    scanf(" %[^\n]s", c->nome);
     printf("CPF: ");
     scanf(" %s", c->cpf);
-
     printf("Email: ");
     scanf(" %s", c->email);
-
     printf("Telefone: ");
     scanf(" %s", c->telefone);
-
-    printf("Data de Nascimento (dd/mm/aaaa): ");
+    printf("Data de Nascimento: ");
     scanf(" %s", c->data_nascimento);
+    c->proximo = NULL; 
 }
 
 void listar_cliente(Cliente *c) {
-    printf("-------------------------------\n");
-    printf("Nome: %s\n", c->nome);
-    printf("CPF: %s\n", c->cpf);
-    printf("Email: %s\n", c->email);
-    printf("Telefone: %s\n", c->telefone);
-    printf("Nascimento: %s\n", c->data_nascimento);
+    printf("Nome do cliente: %s \n", c->nome);
+    printf("CPF do cliente: %s\n", c->cpf);
+    printf("Email do cliente: %s \n", c->email);
+    printf("Telefone do cliente: %s \n", c->telefone);
+    printf("Data de nascimento do cliente: %s \n", c->data_nascimento);
+       
+}
+
+void buscar_cliente(Cliente *inicio){
+    char cpf_procurado[12];
+    printf("Digite o cpf procurado: \n");
+    scanf("%s", cpf_procurado);
+
+    Cliente *atual = inicio;
+    
+    while (atual != NULL) {
+         
+
+        if (strcmp(atual->cpf, cpf_procurado) == 0){
+            printf("Cliente encontrado: %s\n", atual->nome);
+            return;
+        }
+        atual = atual->proximo;
+    }
+    
+    printf("CLiente nao encontrado.\n");
+
+}
+
+void editar_dados(Cliente *c){
+
+}
+
+void remover_cliente(Cliente *c){
+
 }
