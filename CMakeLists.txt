@@ -27,3 +27,11 @@ add_executable(ras_app
 target_include_directories(test_app
     PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
+
+add_executable(menu
+    src/produto.c
+    src/menuProduto.c
+)
+target_include_directories(menu
+    PRIVATE ${PROJECT_SOURCE_DIR}/include
+)
