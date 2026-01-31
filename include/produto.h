@@ -10,6 +10,7 @@ typedef struct produto {
 
 int gerar_codigo_produto();
 Produto* criar_no_produto(Produto x);
+Produto* criar_produto_por_campo(char *nome, double preco, int codigo);
 Produto* criar_lista_produto();
 void destruir_lista_produto(Produto** lista_ref);
 

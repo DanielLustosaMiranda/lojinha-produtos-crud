@@ -41,6 +41,20 @@ Produto* criar_no_produto(Produto x) {
     return novo;
 }
 
+Produto* criar_produto_por_campo(char *nome, double preco, int codigo){
+    Produto* novo = malloc(sizeof(Produto));
+    if (novo == NULL) return NULL;
+
+    novo->nome = malloc(strlen(nome) + 1);
+    if (novo->nome != NULL) {
+        strcpy(novo->nome, nome);
+    }
+    novo->codigo = codigo;
+    novo->preco = preco;
+    novo->prox = NULL;
+    return novo;
+}
+
 Produto* criar_lista_produto() {
     Produto* cabeca = malloc(sizeof(Produto));
     if (cabeca != NULL) {
