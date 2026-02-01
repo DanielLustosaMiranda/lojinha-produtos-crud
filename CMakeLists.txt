@@ -19,14 +19,17 @@ add_executable(test_app
     src/produto.c
     test/testProduto.c
 )
-
-add_executable(ras_app
-    teste/rasc.c
-)
-
 target_include_directories(test_app
     PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
+
+add_executable(menucliente_app
+    src/menucliente.c
+)
+target_include_directories(menucliente_app
+    PRIVATE ${PROJECT_SOURCE_DIR}/include
+)
+
 
 add_executable(menu
     src/produto.c

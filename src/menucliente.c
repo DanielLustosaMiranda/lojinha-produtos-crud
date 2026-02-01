@@ -1,27 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "menucliente.h"
 
-// --- ESTRUTURA ---
-typedef struct Cliente {
-    char nome[50];
-    char cpf[12];
-    char email[100];
-    char telefone[15];
-    char data_nascimento[11];
-    struct Cliente *proximo;
-} Cliente;
 
-// --- PROTÓTIPOS ---
-void print_menu();
-void menu_editar();
-void cadastrar_cliente(Cliente *c);
-void listar_cliente(Cliente *c);
-Cliente* buscar_cliente(Cliente *inicio, char *cpf_procurado);
-void editar_dados(Cliente *inicio);
-void remover_cliente(Cliente *c);
 
-// --- MAIN ---
 int main() {
     int entrada;
     Cliente *inicio = NULL;
@@ -70,9 +53,16 @@ int main() {
             case 4:
                 editar_dados(inicio);
                 break;
+
+            case 5:
+                inicio = remover_cliente(inicio);
+                break; 
+                
+                
             case 0:
                 printf("Saindo do sistema...\n");
                 break;
+
             default:
                 printf("Opcao invalida!\n");
         }
@@ -104,14 +94,14 @@ void print_menu() {
 
 void cadastrar_cliente(Cliente *c) {
     printf("Nome: ");
-    scanf(" %[^\n]s", c->nome);
+    scanf(" %[^\n]", c->nome);
     printf("CPF: ");
     scanf(" %s", c->cpf);
     printf("Email: ");
     scanf(" %s", c->email);
     printf("Telefone: ");
     scanf(" %s", c->telefone);
-    printf("Data de Nascimento: ");
+    printf("Data de Nascimento (DD/MM/AAAA): ");
     scanf(" %s", c->data_nascimento);
     c->proximo = NULL; 
 }
@@ -174,7 +164,7 @@ void editar_dados(Cliente *inicio) {
         switch (entrada) {
             case 1:
                 printf("Mudar nome: ");
-                scanf(" %[^\n]", encontrado->nome);
+                scanf("% [^\n]", encontrado->nome);
                 printf("Nome editado.\n");
                 printf("Novo nome: %s\n", encontrado->nome);
                 break;
@@ -182,25 +172,25 @@ void editar_dados(Cliente *inicio) {
                 printf("Mudar CPF: ");
                 scanf("%11s", encontrado->cpf);
                 printf("CPF editado.\n");
-                 printf("Novo nome: %s\n", encontrado->cpf);
+                 printf("Novo cpf: %s\n", encontrado->cpf);
                 break;
             case 3:   
                 printf("Mudar email: ");
                 scanf("%s", encontrado->email);
                 printf("Email editado.\n");
-                 printf("Novo nome: %s\n", encontrado->email);
+                 printf("Novo email: %s\n", encontrado->email);
                 break;
             case 4: 
                 printf("Mudar telefone: ");
                 scanf("%s", encontrado->telefone);
                 printf("Telefone editado.\n");
-                 printf("Novo nome: %s\n", encontrado->telefone);
+                 printf("Novo telefone: %s\n", encontrado->telefone);
                 break;
             case 5: 
                 printf("Mudar data de nascimento: ");
                 scanf("%s", encontrado->data_nascimento);
                 printf("Data de nascimento editada.\n");
-                 printf("Novo nome: %s\n", encontrado->data_nascimento);
+                 printf("Nova data de nascimento: %s\n", encontrado->data_nascimento);
                 break;
             case 0: 
                 printf("Saindo da edicao.\n");
@@ -212,6 +202,57 @@ void editar_dados(Cliente *inicio) {
     } while (entrada != 0);
 }
 
-void remover_cliente(Cliente *c){
+Cliente* remover_cliente(Cliente *inicio){
+    int opcao;
+    char cpf_busca[15];
+    Cliente *atual = inicio;
+    Cliente *anterior = NULL;
 
+    if (inicio == NULL){
+        printf("A lista esta vazia.\n");
+        return NULL;
+    }
+
+    printf("Digite o cpf que deseja remover:\n ");
+    scanf("%s", cpf_busca);
+    while (getchar() != '\n'); 
+
+    while (atual != NULL && strcmp(atual->cpf, cpf_busca) != 0) {
+        anterior = atual;
+        atual = atual->proximo;
+    }  
+    
+    if (atual == NULL) {
+        printf("Cliente com CPF %s nao encontrado.\n", cpf_busca);
+        return inicio; // Retorna a lista original sem mexer em nada
+    }
+
+    printf("Cliente encontrado:%s \n", atual->nome);
+    menu_remove();
+    scanf("%d", &opcao);
+    while (getchar() != '\n');
+
+    if (opcao == 1){
+        if (anterior == NULL){
+            inicio = atual->proximo;
+        } 
+        
+        else {
+            anterior->proximo = atual->proximo;
+        }
+        free(atual);
+        printf("Cliente removido com sucesso!\n");
+    } 
+    
+    else {
+        printf("Remoçao cancelada.\n");
+    }
+    
+    return inicio;
+}
+
+void menu_remove(){
+    printf("Deseja remover o cliente?\n");
+    printf("1  -  SIM \n");
+    printf("2  -  NAO \n");
 }
