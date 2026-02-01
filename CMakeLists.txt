@@ -6,15 +6,16 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
+# Binario main
 add_executable(${PROJECT_NAME}
     src/main.c
     src/produto.c
 )
-
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
 
+# Binario test Produto
 add_executable(test_app
     src/produto.c
     test/testProduto.c
@@ -23,6 +24,7 @@ target_include_directories(test_app
     PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
 
+# Binario menucliente
 add_executable(menucliente_app
     src/menucliente.c
 )
@@ -30,11 +32,16 @@ target_include_directories(menucliente_app
     PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
 
-
+# Binario menuProduto
 add_executable(menu
     src/produto.c
     src/menuProduto.c
 )
 target_include_directories(menu
     PRIVATE ${PROJECT_SOURCE_DIR}/include
+)
+
+# Binario caixa
+add_executable(caixa_app
+    src/caixa.c
 )
