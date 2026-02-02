@@ -1,21 +1,10 @@
+#include "menuProduto.h"
 #include "produto.h"
 
 #include <stdio.h>
 #include <string.h>
 
-int print_menu_produto();
-void menu_editar();
-void main_produto();
-
-void cadastrar_produto(Produto *inicio);
-
-void listar_produto(Produto *p);
-void pesquisar_produto(Produto *inicio);
-
-void editar_dados(Produto *inicio);
-void remover_produto(Produto *inicio);
-
-int main(){
+int menu_Produto(){
     int opcao;
     Produto *head = criar_lista_produto();
     Produto lista_base[4] = {
@@ -66,6 +55,7 @@ int main(){
 
     return 0;
 }
+
 int print_menu_produto(){
     printf("\n--------------- Cadastro de Produtos ------------------\n");
     printf("1 - Cadastrar novo Produto\n");
