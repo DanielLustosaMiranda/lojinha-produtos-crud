@@ -12,9 +12,11 @@ Carrinho * headcell();
 void adicionarCarrinho(int codigo_produto, Carrinho *head, Produto *lista);//Insere no final da lista.
 void retirarCarrinho (int x, Carrinho *head);
 void listar (Carrinho *head);
+void limparCarrinho (Carrinho *head);
 
 void printMenuCarrinho ();
 void telaCompra();
 void menuCarrinho(Carrinho *head, Produto *estoque);
-void liberar_lista_carrinho(Carrinho *head);
+
+void destruir_lista_carrinho(Carrinho *head);
 #endif

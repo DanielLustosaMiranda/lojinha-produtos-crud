@@ -58,7 +58,7 @@ void rodar_programa(){
 
     liberar_lista(head_cliente);
     destruir_lista_produto(&head_produto);
-    liberar_lista_carrinho(head_carrinho);
+    destruir_lista_carrinho(head_carrinho);
 }
 
 int main() {
