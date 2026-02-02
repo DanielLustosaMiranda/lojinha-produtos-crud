@@ -138,6 +138,7 @@ void menuCarrinho(Carrinho *head, Produto *estoque) {
                 if (resposta == 'S') {
                     telaCompra();
                     opcao = 0;
+                    limparCarrinho(head);
                 }
                 break;
             }
@@ -147,7 +148,7 @@ void menuCarrinho(Carrinho *head, Produto *estoque) {
                 printf("Insira o codigo do produto: \n");
                 int codigo1;
                 scanf("%d", &codigo1);
-                adicionarCarrinho(codigo1,  head, estoque);
+                adicionarCarrinho(codigo1, head, estoque);
                 sleep(2);
                 break;
             }
@@ -160,7 +161,18 @@ void menuCarrinho(Carrinho *head, Produto *estoque) {
     } while (opcao != 0);
 }
 
-void liberar_lista_carrinho(Carrinho *head) {
+void limparCarrinho (Carrinho *head) {
+    Carrinho *atual = head->prox;
+    while (atual != NULL) {
+        Carrinho *temp = atual;
+        atual = atual->prox;
+        free(temp);
+    }
+
+    head->prox = NULL;
+}
+
+void destruir_lista_carrinho(Carrinho *head) {
     Carrinho *atual = head;
     while (atual != NULL) {
         Carrinho *temp = atual;    
