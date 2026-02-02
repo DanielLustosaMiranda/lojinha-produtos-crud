@@ -11,7 +11,7 @@ typedef struct Cliente {
     struct Cliente *proximo;
 } Cliente;
 
-
+int menuCliente();
 void print_menu();
 void menu_editar();
 void cadastrar_cliente(Cliente *c);
