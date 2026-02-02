@@ -17,7 +17,6 @@ int menu_Produto(){
         inserir_produto_fim(head, lista_base[i]);
     do{
         opcao = print_menu_produto();
-        char codigo;
         
         switch (opcao) {
             case 1:{
@@ -25,7 +24,6 @@ int menu_Produto(){
                 break;
             }
             case 2:{
-                Produto *aux = head;
                 imprime_lista_produto(head);
                 break;
             }
@@ -34,7 +32,7 @@ int menu_Produto(){
                 break;
             }
             case 4:{
-                editar_dados(head);
+                editar_dados_produto(head);
                 break;
             }
             case 5:{
@@ -88,7 +86,7 @@ void cadastrar_produto(Produto *inicio){
     printf("\nProduto cadastrado com sucesso!\n");
 }
 
-void editar_dados(Produto *inicio){
+void editar_dados_produto(Produto *inicio){
     printf("Digite o codigo do produto\n");
     int codigo = -1;
     scanf("%d",&codigo);
@@ -110,6 +108,10 @@ void editar_dados(Produto *inicio){
     int entrada;
     scanf("%d", &entrada);
     switch (entrada) {
+        case 0:{
+            printf("Saindo da edicao.\n");
+            break;
+        }
         case 1:{
             printf("Mudar nome: ");
             scanf(" %[^\n]", encontrado->nome);
@@ -124,10 +126,6 @@ void editar_dados(Produto *inicio){
             printf("Mudar preco: ");
             scanf("%lf", &encontrado->preco);
         }        
-        case 0:{
-            printf("Saindo da edicao.\n");
-            break;
-        }
         default:{
             printf("Opcao invalida!\n");
             break;
@@ -141,7 +139,6 @@ void remover_produto(Produto *inicio){
     scanf("%d",&codigo);
     
     Produto *encontrado = buscar_produto_por_codigo(inicio,codigo);
-    int entrada;
     if (encontrado == NULL) {
         printf("Produto nao encontrado!\n");
         return;
