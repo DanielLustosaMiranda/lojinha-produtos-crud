@@ -2,18 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
-typedef struct produto {
-    char *nome;
-    int codigo;
-    double preco;
-    struct produto *prox;
-} Produto;
-
-typedef struct carrinho {
-    Produto prod_carrinho;
-    struct carrinho *prox;
-} Carrinho;
+#include "caixa.h"
 
 Carrinho * headcell() {
     Carrinho *head;
@@ -96,14 +85,16 @@ void telaCompra() {
     printf("**           Seu pedido ja esta sendo preparado com carinho.                 **\n");
     printf("**                Esperamos ver voce novamente em breve!                     **\n");
     printf("===============================================================================\n");
-    for (int i=5; i>0; i--) {
+    for (int i=3; i>0; i--) {
         printf("Voltando para o menu inicial em %d...\n", i);
         sleep(1);
+        printf("\x1b[1F"); // Move para o início da linha anterior
+        printf("\x1b[2K"); // Limpa a linha inteira
     }
 }
 
 void menuCarrinho (Carrinho *head) {
-    int opcao=1, aux;
+    int opcao, aux;
 
     do {
         printMenuCarrinho();
@@ -128,7 +119,7 @@ void menuCarrinho (Carrinho *head) {
                 char resposta;
                 system("clear");
                 listar(head);
-                printf("Deseja realizar a compra? (S/N): ");
+                printf("Deseja realizar a compra? Digite (S) para confirmar: ");
                 scanf(" %c", &resposta);
                 if (resposta == 'S') {
                     telaCompra();
@@ -141,39 +132,4 @@ void menuCarrinho (Carrinho *head) {
                 sleep(1.8);
         }
     } while (opcao != 4);
-}
-
-int main () {
-    Carrinho *head = headcell();
-
-    Produto p1 = {
-        .nome = "Arruela",
-        .codigo = 105,
-        .preco = 5.5
-    };
-
-    Produto p2 = {
-        .nome = "Chave de Fenda",
-        .codigo = 112,
-        .preco = 20.5
-    };    
-
-    Produto p3= {
-        .nome = "Parafusadeira",
-        .codigo = 501,
-        .preco = 100.99
-    };
-
-    Produto p4 = {
-        .nome = "Martelo",
-        .codigo = 505,
-        .preco = 101.99
-    };
-
-    adicionarCarrinho(p3, head);
-    adicionarCarrinho(p2, head);
-    adicionarCarrinho(p4, head);
-    menuCarrinho(head);
-
-    return 0;
 }
