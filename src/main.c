@@ -5,6 +5,7 @@
 #include <stdatomic.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 
 void rodar_programa(){
@@ -34,6 +35,9 @@ void rodar_programa(){
         scanf("%d", &resposta);
     
         switch (resposta) {
+            case 0:{
+                break;
+            }
             case 1:{
                 head_cliente = menuCliente(head_cliente);
                 break;
@@ -47,7 +51,8 @@ void rodar_programa(){
                 break;
             }
             default:{
-                printf("invalida\n");
+                printf("Opção inválida!\n");
+                sleep(2);
                 break;
             }
         }

@@ -65,9 +65,8 @@ void listar (Carrinho *head) {
             printf(" NOME : %s \n", p->prod_carrinho.nome);
             printf(" PREÇO : %.2lf \n", p->prod_carrinho.preco);
             printf(" CODIGO : %03d \n", p->prod_carrinho.codigo);
-            // printf(" QUANTIDADE : %d \n", p->quantidade);
             printf(" ----------------- \n");
-            valor_total += p->prod_carrinho.preco; //* p->quantidade;        
+            valor_total += p->prod_carrinho.preco;       
             i++;
         }
         printf("Valor total %.2lf\n", valor_total);
@@ -133,13 +132,19 @@ void menuCarrinho(Carrinho *head, Produto *estoque) {
                 char resposta;
                 system("clear");
                 listar(head);
-                printf("Deseja realizar a compra? Digite (S) para confirmar: ");
-                scanf(" %c", &resposta);
-                if (resposta == 'S') {
-                    telaCompra();
-                    opcao = 0;
-                    limparCarrinho(head);
+                if (head->prox) {
+                    printf("Deseja realizar a compra? Digite (s) para confirmar: ");
+                    getchar();
+                    scanf("%c", &resposta);
+                    if (resposta == 's') {
+                        telaCompra();
+                        opcao = 0;
+                        limparCarrinho(head);
+                    }
+                    break;
                 }
+                printf("Digite qualquer numero para voltar para o menu: ");
+                scanf("%d", &aux);
                 break;
             }
             case 4:{
