@@ -20,5 +20,10 @@ Cliente* buscar_cliente(Cliente *inicio, char *cpf_procurado);
 void editar_dados(Cliente *inicio);
 Cliente* remover_cliente(Cliente *c);
 void menu_remove();
+Cliente *novo_cadastro(Cliente *inicio);
+void exibir_lista(Cliente *inicio);
+void executar_busca(Cliente *inicio);
+void liberar_lista(Cliente *inicio);
+
 
 #endif
