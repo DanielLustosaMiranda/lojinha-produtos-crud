@@ -4,39 +4,30 @@
 #include <stdio.h>
 #include <string.h>
 
-int menu_Produto(){
+int menu_Produto(Produto *estoque){
     int opcao;
-    Produto *head = criar_lista_produto();
-    Produto lista_base[4] = {
-        {"Refri", 1, 15.5, NULL}, 
-        {"Suco", 2, 10.1, NULL},
-        {"Suco verde", 3, 34.1, NULL},
-        {"Maracuja", 4, 10.1, NULL}
-    };
-    for(int i = 0; i < 4; i++)
-        inserir_produto_fim(head, lista_base[i]);
     do{
         opcao = print_menu_produto();
         
         switch (opcao) {
             case 1:{
-                cadastrar_produto(head);
+                cadastrar_produto(estoque);
                 break;
             }
             case 2:{
-                imprime_lista_produto(head);
+                imprime_lista_produto(estoque);
                 break;
             }
             case 3:{
-                pesquisar_produto(head);
+                pesquisar_produto(estoque);
                 break;
             }
             case 4:{
-                editar_dados_produto(head);
+                editar_dados_produto(estoque);
                 break;
             }
             case 5:{
-                remover_produto(head);
+                remover_produto(estoque);
                 break;
             }
             case 0:{
@@ -49,7 +40,7 @@ int menu_Produto(){
             }
         }
 
-    }while(opcao !=0);
+    }while(opcao != 0);
 
     return 0;
 }

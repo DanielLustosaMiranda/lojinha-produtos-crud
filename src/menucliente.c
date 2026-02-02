@@ -85,7 +85,7 @@ void editar_dados(Cliente *inicio) {
         switch (entrada) {
             case 1:
                 printf("Mudar nome: ");
-                scanf("% [^\n]", encontrado->nome);
+                scanf("%[^\n]", encontrado->nome);
                 printf("Nome editado.\n");
                 printf("Novo nome: %s\n", encontrado->nome);
                 break;
@@ -229,12 +229,10 @@ void liberar_lista(Cliente *inicio) {
         atual = atual->proximo;   
         free(temp);               
     }
-    printf("\nMemoria liberada com sucesso. Sistema encerrado!\n");
 }
 
-int menuCliente() {
+int menuCliente(Cliente *inicio) {
     int entrada;
-    Cliente *inicio = NULL;
 
     do {
         print_menu();
@@ -261,8 +259,6 @@ int menuCliente() {
             case 5:
                 inicio = remover_cliente(inicio);
                 break; 
-                
-                
             case 0:
                 printf("Saindo do sistema...\n");
                 break;
@@ -272,11 +268,6 @@ int menuCliente() {
         }
     } while (entrada != 0);
 
-  liberar_lista(inicio);
-
-return 0;
-
+    return 0;
 
 }
-
-

@@ -14,7 +14,6 @@ void pesquisar_produto(Produto *inicio);
 
 void editar_dados_produto(Produto *inicio);
 void remover_produto(Produto *inicio);
-
-int menu_Produto();
+int menu_Produto(Produto *estoque);
 
 #endif

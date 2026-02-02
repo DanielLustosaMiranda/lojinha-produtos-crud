@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #include "caixa.h"
 
@@ -12,10 +11,19 @@ Carrinho * headcell() {
     return head;
 }
 
-void adicionarCarrinho (Produto x, Carrinho *head) { //Insere no final da lista.
+void adicionarCarrinho(int codigo_produto, Carrinho *head, Produto *lista) { //Insere no final da lista.
+    
+    Produto *encontrado = buscar_produto_por_codigo(lista,codigo_produto);
+    if (encontrado == NULL) {
+        printf("Produto nao encontrado!\n");
+        return;
+    }
+    printf("Resultado:\n");
+    imprimir_produto(encontrado);
+
     Carrinho *aux, *novo = malloc(sizeof (Carrinho));
     if (novo) {
-        novo->prod_carrinho = x;
+        novo->prod_carrinho = *encontrado;
         novo->prox = NULL;
         if (head->prox == NULL) 
             head->prox = novo;
@@ -73,7 +81,8 @@ void printMenuCarrinho () {
     printf(" (1) Mostrar produtos do carrinho\n"); 
     printf(" (2) Retirar produto do carrinho\n");
     printf(" (3) Realizar compra\n");
-    printf(" (4) Sair\n");
+    printf(" (4) Adicionar produto no carrinho\n");
+    printf(" (0) Sair\n");
     printf("------------------------------\n");  
     printf("Digite a opção desejada: ");  
 }
@@ -93,29 +102,34 @@ void telaCompra() {
     }
 }
 
-void menuCarrinho (Carrinho *head) {
+void menuCarrinho(Carrinho *head, Produto *estoque) {
     int opcao, aux;
 
     do {
         printMenuCarrinho();
         scanf("%d", &opcao);
         switch (opcao) {
-            case 1:
+            case 0:
+                break;
+            case 1:{
                 system("clear");
                 listar(head);
                 printf("Digite qualquer numero para voltar para o menu: ");
                 scanf("%d", &aux);
                 break;
-            case 2:
+            }
+            case 2:{
                 int codigo;
                 system("clear");
+                listar(head);
                 printf("Digite o codigo do produto que deseja retirar: ");
                 scanf("%d", &codigo);
                 retirarCarrinho(codigo, head);
                 printf("Digite qualquer numero para voltar para o menu: ");
                 scanf("%d", &aux);
                 break;
-            case 3:
+            }
+            case 3:{
                 char resposta;
                 system("clear");
                 listar(head);
@@ -123,13 +137,34 @@ void menuCarrinho (Carrinho *head) {
                 scanf(" %c", &resposta);
                 if (resposta == 'S') {
                     telaCompra();
-                    opcao = 4; 
+                    opcao = 0;
                 }
-            case 4:
                 break;
-            default:
+            }
+            case 4:{
+                system("clear");
+                imprime_lista_produto(estoque);
+                printf("Insira o codigo do produto: \n");
+                int codigo1;
+                scanf("%d", &codigo1);
+                adicionarCarrinho(codigo1,  head, estoque);
+                sleep(2);
+                break;
+            }
+            default:{
                 printf("Opção invalida! Por favor, digite novamente.\n");
-                sleep(1.8);
+                sleep(2);
+                break;
+            }
         }
-    } while (opcao != 4);
+    } while (opcao != 0);
+}
+
+void liberar_lista_carrinho(Carrinho *head) {
+    Carrinho *atual = head;
+    while (atual != NULL) {
+        Carrinho *temp = atual;    
+        atual = atual->prox;   
+        free(temp);               
+    }
 }
