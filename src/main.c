@@ -9,9 +9,8 @@
 
 void rodar_programa(){
     Carrinho *head_carrinho = headcell();
-    Cliente *head_cliente;
-    head_cliente = malloc(sizeof(Cliente));
-    head_cliente->proximo = NULL;
+    Cliente *head_cliente = NULL;
+   
 
     Produto *head_produto = criar_lista_produto();
 
@@ -36,7 +35,7 @@ void rodar_programa(){
     
         switch (resposta) {
             case 1:{
-                menuCliente(head_cliente);
+                head_cliente = menuCliente(head_cliente);
                 break;
             }
             case 2:{

@@ -24,15 +24,17 @@ void cadastrar_cliente(Cliente *c) {
     scanf(" %s", c->telefone);
     printf("Data de Nascimento (DD/MM/AAAA): ");
     scanf(" %s", c->data_nascimento);
-    c->proximo = NULL; 
+     
 }
 
 void listar_cliente(Cliente *c) {
+     printf("\n==============================================\n");
     printf("Nome do cliente: %s \n", c->nome);
     printf("CPF do cliente: %s\n", c->cpf);
     printf("Email do cliente: %s \n", c->email);
     printf("Telefone do cliente: %s \n", c->telefone);
     printf("Data de nascimento do cliente: %s \n", c->data_nascimento);
+    printf("\n==============================================\n");
 }
 
 Cliente* buscar_cliente(Cliente *inicio, char *cpf_procurado) {
@@ -178,34 +180,40 @@ void menu_remove(){
     printf("2  -  NAO \n");
 }
 
-Cliente *novo_cadastro(Cliente *inicio){
+Cliente *novo_cadastro(Cliente *inicio) {
     Cliente *novo = (Cliente *) malloc(sizeof(Cliente));
-
-    if (novo == NULL){
+    if (novo == NULL) {
         printf("Erro de memoria!\n");
         return inicio;
     }
 
-    cadastrar_cliente(novo);
-    novo->proximo = inicio;
+    cadastrar_cliente(novo); 
+    
+   
+    novo->proximo = inicio; 
 
-    return novo;
+    return novo; 
 }
 
-void exibir_lista(Cliente *inicio){
-    printf("Listagem de clientes\n");
+
+void exibir_lista(Cliente *inicio) {
     Cliente *atual = inicio;
-    if (atual == NULL){
+    if (inicio == NULL) {
+        printf("\n[AVISO]: Nao ha clientes cadastrados ainda!\n");
+        return; // Sai da função antes de tentar o 'while'
+    }
+    
+    
+    if (atual == NULL) {
         printf("Lista vazia!\n");
         return;
     }
 
-    while (atual != NULL){
-        listar_cliente(atual);
-        atual = atual->proximo;
+    while (atual != NULL) {
+        listar_cliente(atual); 
+        atual = atual->proximo; // O ERRO GERALMENTE ESTÁ AQUI: se esquecer essa linha, corrompe.
     }
 }
-
 void executar_busca(Cliente *inicio){
     char cpf_buscar[15];
     printf("Digite o cpf procurado\n");
@@ -214,8 +222,8 @@ void executar_busca(Cliente *inicio){
     Cliente *achado = buscar_cliente(inicio, cpf_buscar);
 
     if (achado){
-        printf("CLiente achado!\n");
-        listar_cliente(inicio);
+        printf("Cliente achado!\n");
+        listar_cliente(achado);
     }
     else {
         printf("Cliente nao encontrado!\n");
@@ -231,13 +239,15 @@ void liberar_lista(Cliente *inicio) {
     }
 }
 
-int menuCliente(Cliente *inicio) {
+Cliente* menuCliente(Cliente *inicio) {
     int entrada;
+    
 
     do {
         print_menu();
         printf("\nDigite a opcao desejada: ");
         scanf("%d", &entrada);
+        getchar();
 
         switch (entrada) {
             case 1: {
@@ -265,9 +275,10 @@ int menuCliente(Cliente *inicio) {
 
             default:
                 printf("Opcao invalida!\n");
+                break;
         }
     } while (entrada != 0);
 
-    return 0;
+    return inicio;
 
 }
