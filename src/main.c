@@ -59,7 +59,7 @@ void rodar_programa(){
                 break;
             }
             case 3:{
-                menuCarrinho(head_carrinho, head_produto);
+                telaLogin(head_carrinho, head_produto, head_cliente);
                 break;
             }
             default:{
