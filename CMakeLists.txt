@@ -24,3 +24,5 @@ target_compile_options(${PROJECT_NAME}
         -Wextra
         -Wshadow
 )
+
+file(COPY codes DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
