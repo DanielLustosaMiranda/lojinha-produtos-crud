@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "caixa.h"
+#include "menucliente.h"
 
 Carrinho * headcell() {
     Carrinho *head;
@@ -74,26 +76,46 @@ void listar (Carrinho *head) {
         printf("Seu carrinho está vazio!\n");
 }
 
-void printMenuCarrinho () {
+void printMenuCarrinho (Cliente *cliente_atual) {
     system("clear"); // No Windows usar system("cls");
-    printf("---------- CARRINHO ----------\n");
-    printf(" (1) Mostrar produtos do carrinho\n"); 
-    printf(" (2) Retirar produto do carrinho\n");
-    printf(" (3) Realizar compra\n");
-    printf(" (4) Adicionar produto no carrinho\n");
-    printf(" (0) Sair\n");
+    printf("---------- MENU DE COMPRA ----------\n");
+    centralizar("Olá", 38);
+    centralizar(cliente_atual->nome, 38);
+    centralizar("seja bem-vindo(a)!", 38);
+    printf("1 - Mostrar produtos do carrinho\n"); 
+    printf("2 - Retirar produto do carrinho\n");
+    printf("3 - Realizar compra\n");
+    printf("4 - Adicionar produto no carrinho\n");
+    printf("0 - Sair\n");
     printf("------------------------------\n");  
     printf("Digite a opção desejada: ");  
 }
 
-void telaCompra() {
+void telaLogin(Carrinho *head, Produto *estoque, Cliente *inicio) {
+    char cpf_busca[12];
+    Cliente *cliente_atual;
+    system("clear");
+    printf("Por favor, digite o seu CPF para entrar no menu de compra: ");
+    scanf(" %[^\n]", cpf_busca);
+    cliente_atual = buscar_cliente(inicio, cpf_busca);
+    if (cliente_atual)
+        menuCarrinho(head, estoque, cliente_atual);
+    else {
+        printf("CPF não encontrado, retornando para o menu inicial.\n");
+        sleep(2);
+        return;
+    }
+}
+
+void telaCompra(Cliente *cliente_atual) {
     system("clear");
     printf("===============================================================================\n");
-    printf("**                   MUITO OBRIGADO PELA SUA COMPRA!                         **\n");
-    printf("**           Seu pedido ja esta sendo preparado com carinho.                 **\n");
-    printf("**                Esperamos ver voce novamente em breve!                     **\n");
+    centralizar(cliente_atual->nome, 81);
+    centralizar("MUITO OBRIGADO PELA SUA COMPRA!", 81);
+    centralizar("Seu pedido ja esta sendo preparado com carinho.", 81);
+    centralizar("Esperamos ver voce novamente em breve!", 81);
     printf("===============================================================================\n");
-    for (int i=3; i>0; i--) {
+    for (int i=5; i>0; i--) {
         printf("Voltando para o menu inicial em %d...\n", i);
         sleep(1);
         printf("\x1b[1F"); // Move para o início da linha anterior
@@ -101,11 +123,11 @@ void telaCompra() {
     }
 }
 
-void menuCarrinho(Carrinho *head, Produto *estoque) {
+void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
     int opcao, aux;
 
     do {
-        printMenuCarrinho();
+        printMenuCarrinho(cliente_atual);
         scanf("%d", &opcao);
         switch (opcao) {
             case 0:
@@ -137,7 +159,7 @@ void menuCarrinho(Carrinho *head, Produto *estoque) {
                     getchar();
                     scanf("%c", &resposta);
                     if (resposta == 's') {
-                        telaCompra();
+                        telaCompra(cliente_atual);
                         opcao = 0;
                         limparCarrinho(head);
                     }
@@ -184,4 +206,14 @@ void destruir_lista_carrinho(Carrinho *head) {
         atual = atual->prox;   
         free(temp);               
     }
+}
+
+void centralizar(char *texto, int largura) {
+    int len = strlen(texto);
+    int espaços = (largura - len) / 2;
+
+    for (int i = 0; i < espaços; i++) {
+        printf(" ");
+    }
+    printf("%s\n", texto);
 }
