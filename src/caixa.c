@@ -210,9 +210,9 @@ void destruir_lista_carrinho(Carrinho *head) {
 
 void centralizar(char *texto, int largura) {
     int len = strlen(texto);
-    int espaços = (largura - len) / 2;
+    int espacos = (largura - len) / 2;
 
-    for (int i = 0; i < espaços; i++) {
+    for (int i = 0; i < espacos; i++) {
         printf(" ");
     }
     printf("%s\n", texto);
