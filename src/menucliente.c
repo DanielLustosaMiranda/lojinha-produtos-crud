@@ -4,7 +4,7 @@
 #include "menucliente.h"
 
 void print_menu() {
-    printf("\n--------------- SISTEMA DE COMPRAS (LISTA) ------------------\n");
+    printf("\n--------------- GERENCIAMENTO DE CLIENTE ------------------\n");
     printf("1 - Cadastrar novo cliente\n");
     printf("2 - Listar todos os clientes\n");
     printf("3 - Buscar cliente pelo CPF\n");
@@ -28,13 +28,13 @@ void cadastrar_cliente(Cliente *c) {
 }
 
 void listar_cliente(Cliente *c) {
-     printf("\n==============================================\n");
+     printf("\n ============================================== \n");
     printf("Nome do cliente: %s \n", c->nome);
     printf("CPF do cliente: %s\n", c->cpf);
     printf("Email do cliente: %s \n", c->email);
     printf("Telefone do cliente: %s \n", c->telefone);
     printf("Data de nascimento do cliente: %s \n", c->data_nascimento);
-    printf("\n==============================================\n");
+    printf("\n ============================================== \n");
 }
 
 Cliente* buscar_cliente(Cliente *inicio, char *cpf_procurado) {
@@ -200,18 +200,13 @@ void exibir_lista(Cliente *inicio) {
     Cliente *atual = inicio;
     if (inicio == NULL) {
         printf("\n[AVISO]: Nao ha clientes cadastrados ainda!\n");
-        return; // Sai da função antes de tentar o 'while'
-    }
-    
-    
-    if (atual == NULL) {
-        printf("Lista vazia!\n");
         return;
     }
+    
 
     while (atual != NULL) {
         listar_cliente(atual); 
-        atual = atual->proximo; // O ERRO GERALMENTE ESTÁ AQUI: se esquecer essa linha, corrompe.
+        atual = atual->proximo; 
     }
 }
 void executar_busca(Cliente *inicio){
