@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <unistd.h>
 
-const char *CODES_FILE = "codes/codes.csv"; // Ajuste o caminho se necessário
+const char *CODES_FILE = "codes/codes.csv";
 const int START_NUM = 999;
 
 int gerar_codigo_produto() {
@@ -27,6 +29,13 @@ int gerar_codigo_produto() {
     return novoCodigo;
 }
 
+bool verifcar_codigo_existente(Produto* lista_ref, int codigo){
+    Produto *achado = buscar_produto_por_codigo(lista_ref, codigo);
+    if(achado != NULL) return true;
+
+    return false;
+}
+
 Produto* criar_no_produto(Produto x) {
     Produto* novo = malloc(sizeof(Produto));
     if (novo == NULL) return NULL;
@@ -37,11 +46,12 @@ Produto* criar_no_produto(Produto x) {
     }
     novo->codigo = x.codigo;
     novo->preco = x.preco;
+    novo->quantidade = x.quantidade;
     novo->prox = NULL;
     return novo;
 }
 
-Produto* criar_produto_por_campo(char *nome, double preco, int codigo){
+Produto* criar_produto_por_campo(char *nome, double preco, int codigo, int quantidade){
     Produto* novo = malloc(sizeof(Produto));
     if (novo == NULL) return NULL;
 
@@ -51,6 +61,7 @@ Produto* criar_produto_por_campo(char *nome, double preco, int codigo){
     }
     novo->codigo = codigo;
     novo->preco = preco;
+    novo->quantidade = quantidade;
     novo->prox = NULL;
     return novo;
 }
@@ -61,6 +72,7 @@ Produto* criar_lista_produto() {
         cabeca->prox = NULL;
         cabeca->codigo = -1;
         cabeca->preco = -1;
+        cabeca->quantidade = -1;
         
         // "0x0'\0'"
         cabeca->nome = malloc(4 * sizeof(char));
@@ -95,6 +107,15 @@ void inserir_produto_fim(Produto* lista_ref, Produto x) {
     atual->prox = novo;
 }
 
+void inserir_produto_comeco(Produto* lista_ref, Produto x){
+    Produto* novo = criar_no_produto(x);
+    if (novo == NULL) return;
+
+    Produto* atual = lista_ref;
+    novo->prox = atual->prox;
+    atual->prox = novo;
+}
+
 Produto* buscar_produto_por_codigo(Produto* lista_ref, int codigo) {
     Produto *aux = lista_ref->prox;
     while (aux != NULL) {
@@ -123,6 +144,17 @@ void editar_preco_produto(Produto* lista_ref, int codigo, double novo_preco) {
     }
 }
 
+void editar_quantidade_produto(Produto *lista_ref, int codigo, int quantidade){
+    Produto* p = buscar_produto_por_codigo(lista_ref, codigo);
+    if (p != NULL) {
+        p->quantidade = quantidade;
+        printf("Preco do produto %d atualizado para R$ %df.\n", codigo, quantidade);
+        if(quantidade == 0)
+            remover_produto_especifico(p, p->codigo);
+    } else {
+        printf("Erro: Produto %d nao encontrado.\n", codigo);
+    }
+}
 void remover_produto_especifico(Produto* lista_ref, int codigo) {
     Produto* anterior = lista_ref;
     Produto* atual = lista_ref->prox;
@@ -168,7 +200,7 @@ void remover_ultimo_da_lista(Produto* lista_ref) {
 
 void imprimir_produto(Produto * prod) {
     if (prod == NULL) return;
-    printf("[%d] %-15s | R$ %7.2f\n", prod->codigo, prod->nome, prod->preco);
+    printf("[%d] %-15s | R$ %7.2f | quantidade: %d \n", prod->codigo, prod->nome, prod->preco, prod->quantidade);
 }
 
 void imprime_lista_produto(Produto* lista_ref) {

@@ -60,19 +60,27 @@ int print_menu_produto(){
 
 void cadastrar_produto(Produto *inicio){
     char nome_temp[100]; 
-    double preco_temp; 
+    double preco_temp;
+    int quantidade;
     int codigo_temp;
 
+    printf("Codigo: ");
+    scanf("%d", &codigo_temp);
+    if(verifcar_codigo_existente(inicio, codigo_temp)){
+        printf("codigo já exite, tente novamente\n");
+        return;
+    }
+        
     printf("Nome do Produto: ");
     scanf(" %[^\n]s", nome_temp);
 
     printf("Preço: ");
     scanf(" %lf", &preco_temp);
-    
-    printf("Codigo: ");
-    scanf("%d", &codigo_temp);
 
-    Produto *novo_produto = criar_produto_por_campo(nome_temp, preco_temp, codigo_temp);
+    printf("Quantidade: ");
+    scanf("%d", &quantidade);
+
+    Produto *novo_produto = criar_produto_por_campo(nome_temp, preco_temp, codigo_temp, quantidade);
     inserir_produto_fim(inicio, *novo_produto);
     printf("\nProduto cadastrado com sucesso!\n");
 }
@@ -82,7 +90,7 @@ void editar_dados_produto(Produto *inicio){
     int codigo = -1;
     scanf("%d",&codigo);
 
-    Produto *encontrado = buscar_produto_por_codigo(inicio,codigo);
+    Produto *encontrado = buscar_produto_por_codigo(inicio, codigo);
     if (encontrado == NULL) {
         printf("Produto nao encontrado!\n");
         return;
@@ -93,7 +101,8 @@ void editar_dados_produto(Produto *inicio){
     printf("1- Mudar nome:\n");
     printf("2- Mudar codigo:\n");
     printf("3- Mudar preco:\n");
-    printf("4- Mudar todas a opções anteriores:\n");
+    printf("4- Mudar quantidade\n");
+    printf("5- Mudar todas a opções anteriores:\n");
     printf("0- Voltar\n");
     
     int entrada;
@@ -110,13 +119,34 @@ void editar_dados_produto(Produto *inicio){
         }
         case 2:{
             printf("Mudar codigo: ");
-            scanf("%d", &encontrado->codigo);
+            int temp_codigo;
+            scanf("%d", &temp_codigo);
+            if(verifcar_codigo_existente(inicio, temp_codigo)){
+                printf("Codigo duplicado! Tente novamente\n");
+                break;
+            }
+            encontrado->codigo = temp_codigo;
             break;
         }
         case 3:{
             printf("Mudar preco: ");
             scanf("%lf", &encontrado->preco);
-        }        
+            break;
+        }
+        case 4:{
+            printf("Mudar quantidade: ");
+            scanf("%d", &encontrado->quantidade); 
+            break;
+        }
+        case 5:{
+            printf("Mudar nome: ");
+            scanf(" %[^\n]", encontrado->nome);
+            printf("Mudar codigo: ");
+            scanf("%d", &encontrado->codigo);
+            printf("Mudar preco: ");
+            scanf("%lf", &encontrado->preco);
+            break;
+        }
         default:{
             printf("Opcao invalida!\n");
             break;
@@ -149,6 +179,7 @@ void remover_produto(Produto *inicio){
         }
         default:{
             printf("Opção invalida\n");
+            break;
         }
     }
 }
