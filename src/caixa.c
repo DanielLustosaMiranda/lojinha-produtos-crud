@@ -13,9 +13,8 @@ Carrinho * headcell() {
     return head;
 }
 
-void adicionarCarrinho(int codigo_produto, Carrinho *head, Produto *lista) { //Insere no final da lista.
-    
-    Produto *encontrado = buscar_produto_por_codigo(lista,codigo_produto);
+void adicionarCarrinho(int codigo_produto, Carrinho *head, Produto *estoque) { //Insere no final da lista.
+    Produto *encontrado = buscar_produto_por_codigo(estoque, codigo_produto);
     if (encontrado == NULL) {
         printf("Produto nao encontrado!\n");
         return;
@@ -35,16 +34,16 @@ void adicionarCarrinho(int codigo_produto, Carrinho *head, Produto *lista) { //I
                 aux = aux->prox;
             aux->prox = novo;
         }
-    } else
+    } else 
         printf("Erro ao adicionar o produto no carrinho!\n"); //Erro ao alocar memória.
 }
 
-void retirarCarrinho (int x, Carrinho *head) {
+void retirarCarrinho (int codigo_produto, Carrinho *head) {
     Carrinho *p, *q;
     p = head;
     q = head->prox;
 
-    while (q != NULL && q->prod_carrinho.codigo != x) {
+    while (q != NULL && q->prod_carrinho.codigo != codigo_produto) {
         p = q;
         q = q->prox;
     }
@@ -107,14 +106,32 @@ void telaLogin(Carrinho *head, Produto *estoque, Cliente *inicio) {
     }
 }
 
-void telaCompra(Cliente *cliente_atual) {
-    system("clear");
+void telaCompra(Cliente *cliente_atual, Carrinho *head, Produto *estoque) {
+    Produto *encontrado;
+    Carrinho *p = head->prox;
+    while (p != NULL) {
+        encontrado = buscar_produto_por_codigo(estoque, p->prod_carrinho.codigo);
+        if (encontrado == NULL) {
+            printf("Produto nao encontrado\n");
+            return;
+        }
+
+        if (encontrado->quantidade == 0) {
+            printf("Não foi possivel realizar a compra de todos os produtos [%d]! Não temos estoque o suficiente.\n", encontrado->codigo);
+        } else { 
+            encontrado->quantidade--; 
+        }
+
+        p = p->prox;
+    }
+
     printf("===============================================================================\n");
     centralizar(cliente_atual->nome, 81);
     centralizar("MUITO OBRIGADO PELA SUA COMPRA!", 81);
     centralizar("Seu pedido ja esta sendo preparado com carinho.", 81);
     centralizar("Esperamos ver voce novamente em breve!", 81);
     printf("===============================================================================\n");
+
     for (int i=5; i>0; i--) {
         printf("Voltando para o menu inicial em %d...\n", i);
         sleep(1);
@@ -159,9 +176,9 @@ void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
                     getchar();
                     scanf("%c", &resposta);
                     if (resposta == 's') {
-                        telaCompra(cliente_atual);
+                        system("clear");
+                        telaCompra(cliente_atual, head, estoque);
                         opcao = 0;
-                        limparCarrinho(head);
                     }
                     break;
                 }
@@ -170,12 +187,12 @@ void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
                 break;
             }
             case 4:{
+                int codigo;
                 system("clear");
                 imprime_lista_produto(estoque);
                 printf("Insira o codigo do produto: \n");
-                int codigo1;
-                scanf("%d", &codigo1);
-                adicionarCarrinho(codigo1, head, estoque);
+                scanf("%d", &codigo);
+                adicionarCarrinho(codigo, head, estoque);
                 sleep(2);
                 break;
             }
@@ -186,6 +203,7 @@ void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
             }
         }
     } while (opcao != 0);
+    limparCarrinho(head);
 }
 
 void limparCarrinho (Carrinho *head) {

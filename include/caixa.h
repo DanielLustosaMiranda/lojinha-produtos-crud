@@ -10,14 +10,14 @@ typedef struct carrinho {
 } Carrinho;
 
 Carrinho * headcell();
-void adicionarCarrinho(int codigo_produto, Carrinho *head, Produto *lista);//Insere no final da lista.
-void retirarCarrinho (int x, Carrinho *head);
+void adicionarCarrinho(int codigo_produto, Carrinho *head, Produto *estoque);
+void retirarCarrinho (int codigo_produto, Carrinho *head);
 void listar (Carrinho *head);
 void limparCarrinho (Carrinho *head);
 
 void telaLogin(Carrinho *head, Produto *estoque, Cliente *inicio);
 void printMenuCarrinho (Cliente *cliente_atual);
-void telaCompra(Cliente *cliente_atual);
+void telaCompra(Cliente *cliente_atual, Carrinho *head, Produto *estoque);
 void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual);
 
 void destruir_lista_carrinho(Carrinho *head);
