@@ -46,7 +46,7 @@ int menu_Produto(Produto *estoque){
 }
 
 int print_menu_produto(){
-    printf("\n--------------- Cadastro de Produtos ------------------\n");
+    printf("\n--------------- GERENCIAMENTO DE PRODUTO ------------------\n");
     printf("1 - Cadastrar novo Produto\n");
     printf("2 - Listar todos os Produtos\n");
     printf("3 - Buscar Produto pelo codigo\n");

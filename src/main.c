@@ -38,10 +38,12 @@ void rodar_programa(){
     int resposta;
     do{
         system("clear");
-        printf("1- Cliente\n");
-        printf("2- Produto\n");
-        printf("3- Carrinho\n");
-        printf("0- Sair\n");
+        printf("\n---------------- BEM VINDO AO SISTEMA DE COMPRAS -----------------\n");
+        printf("                         Escolha uma opcao.                         \n");
+        printf("1 - Gerenciamento de Cliente \n");
+        printf("2 - Gerenciamento de Produto \n");
+        printf("3 - Carrinho \n");
+        printf("0 - Sair \n");
     
         scanf("%d", &resposta);
     
