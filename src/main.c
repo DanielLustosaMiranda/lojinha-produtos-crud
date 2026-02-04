@@ -24,7 +24,6 @@ void limpar_arquivos_de_codigo(){
 void rodar_programa(){
     Carrinho *head_carrinho = headcell();
     Cliente *head_cliente = NULL;
-   
     Produto *head_produto = criar_lista_produto();
 
     Produto lista_base[tam_inicial] = {
