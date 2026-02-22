@@ -1,5 +1,4 @@
 #include "caixa.h"
-#include "menucliente.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -98,7 +97,7 @@ void telaLogin(Carrinho *head, Produto *estoque, Cliente *inicio) {
   limparConsole();
   printf("Por favor, digite o seu CPF para entrar no menu de compra: ");
   scanf(" %[^\n]", cpf_busca);
-  cliente_atual = buscar_cliente(inicio, cpf_busca);
+  cliente_atual = buscar_cliente_por_cpf(inicio, cpf_busca);
   if (cliente_atual)
     menuCarrinho(head, estoque, cliente_atual);
   else {
