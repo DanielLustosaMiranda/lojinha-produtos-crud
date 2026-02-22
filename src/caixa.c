@@ -1,8 +1,8 @@
 #include "caixa.h"
 #include "menucliente.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
 Carrinho *headcell() {
@@ -78,7 +78,7 @@ void listar(Carrinho *head) {
 }
 
 void printMenuCarrinho(Cliente *cliente_atual) {
-  system("clear"); // No Windows usar system("cls");
+  limparConsole();
   printf("---------- MENU DE COMPRA ----------\n");
   centralizar("Olá", 38);
   centralizar(cliente_atual->nome, 38);
@@ -95,7 +95,7 @@ void printMenuCarrinho(Cliente *cliente_atual) {
 void telaLogin(Carrinho *head, Produto *estoque, Cliente *inicio) {
   char cpf_busca[12];
   Cliente *cliente_atual;
-  system("clear");
+  limparConsole();
   printf("Por favor, digite o seu CPF para entrar no menu de compra: ");
   scanf(" %[^\n]", cpf_busca);
   cliente_atual = buscar_cliente(inicio, cpf_busca);
@@ -156,7 +156,7 @@ void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
     case 0:
       break;
     case 1: {
-      system("clear");
+      limparConsole();
       listar(head);
       printf("Digite qualquer numero para voltar para o menu: ");
       scanf("%d", &aux);
@@ -164,7 +164,7 @@ void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
     }
     case 2: {
       int codigo;
-      system("clear");
+      limparConsole();
       listar(head);
       printf("Digite o codigo do produto que deseja retirar: ");
       scanf("%d", &codigo);
@@ -175,14 +175,14 @@ void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
     }
     case 3: {
       char resposta;
-      system("clear");
+      limparConsole();
       listar(head);
       if (head->prox) {
         printf("Deseja realizar a compra? Digite (s) para confirmar: ");
         getchar();
         scanf("%c", &resposta);
         if (resposta == 's') {
-          system("clear");
+          limparConsole();
           telaCompra(cliente_atual, head, estoque);
           opcao = 0;
         }
@@ -194,7 +194,7 @@ void menuCarrinho(Carrinho *head, Produto *estoque, Cliente *cliente_atual) {
     }
     case 4: {
       int codigo;
-      system("clear");
+      limparConsole();
       imprime_lista_produto(estoque);
       printf("Insira o codigo do produto: \n");
       scanf("%d", &codigo);
@@ -230,14 +230,4 @@ void destruir_lista_carrinho(Carrinho *head) {
     atual = atual->prox;
     free(temp);
   }
-}
-
-void centralizar(char *texto, int largura) {
-  int len = strlen(texto);
-  int espacos = (largura - len) / 2;
-
-  for (int i = 0; i < espacos; i++) {
-    printf(" ");
-  }
-  printf("%s\n", texto);
 }
