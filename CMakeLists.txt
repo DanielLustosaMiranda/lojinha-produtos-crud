@@ -10,9 +10,10 @@ set(CMAKE_C_EXTENSIONS OFF)
 add_executable(${PROJECT_NAME}
     src/main.c
     src/caixa.c
-    src/menuProduto.c
-    src/menucliente.c
+    src/cliente.c
     src/produto.c
+    src/menuProduto.c
+    src/menuCliente.c
     utils/utils.c
 )
 target_include_directories(${PROJECT_NAME}
