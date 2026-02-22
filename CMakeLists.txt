@@ -13,11 +13,14 @@ add_executable(${PROJECT_NAME}
     src/menuProduto.c
     src/menucliente.c
     src/produto.c
+    utils/utils.c
 )
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
-
+target_include_directories(${PROJECT_NAME}
+    PRIVATE ${PROJECT_SOURCE_DIR}/utils
+)
 target_compile_options(${PROJECT_NAME}
     PRIVATE
         -Wall
