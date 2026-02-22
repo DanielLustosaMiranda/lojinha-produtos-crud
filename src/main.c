@@ -1,6 +1,7 @@
 #include "caixa.h"
+#include "cliente.h"
+#include "menuCliente.h"
 #include "menuProduto.h"
-#include "menucliente.h"
 #include "produto.h"
 #include <stdatomic.h>
 #include <stdio.h>
@@ -23,7 +24,7 @@ void limpar_arquivos_de_codigo() {
 
 void rodar_programa() {
   Carrinho *head_carrinho = headcell();
-  Cliente *head_cliente = NULL;
+  Cliente *head_cliente = criar_lista_cliente();
   Produto *head_produto = criar_lista_produto();
 
   Produto lista_base[tam_inicial] = {
@@ -53,7 +54,7 @@ void rodar_programa() {
       break;
     }
     case 1: {
-      head_cliente = menuCliente(head_cliente);
+      menu_cliente(head_cliente);
       break;
     }
     case 2: {
@@ -73,7 +74,7 @@ void rodar_programa() {
 
   } while (resposta != 0);
 
-  liberar_lista(head_cliente);
+  destruir_lista_cliente(&head_cliente);
   destruir_lista_produto(&head_produto);
   destruir_lista_carrinho(head_carrinho);
   limpar_arquivos_de_codigo();

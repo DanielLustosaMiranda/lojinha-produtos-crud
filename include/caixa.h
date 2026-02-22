@@ -1,7 +1,7 @@
 #ifndef CAIXA_H
 #define CAIXA_H
 
-#include "menucliente.h"
+#include "cliente.h"
 #include "produto.h"
 
 typedef struct carrinho {
