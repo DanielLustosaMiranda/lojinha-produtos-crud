@@ -2,4 +2,4 @@ build/
 .cache/
 .vscode/
 *.exe
-codes/
+codes/codes.csv
